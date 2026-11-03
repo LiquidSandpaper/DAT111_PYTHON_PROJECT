@@ -1,0 +1,14 @@
+# PyCharm
+.idea/
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# Lecture examples
+Foreles*.py
+
+# Temporary files
+tmp.py
