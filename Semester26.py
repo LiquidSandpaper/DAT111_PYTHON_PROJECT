@@ -1,28 +1,37 @@
-# importing modules and packages
+# importerer modules og packages
 import matplotlib.pyplot as plt
 from matplotlib.widgets import RadioButtons
 import matplotlib.image as mpimg
 from Semester26_Model import  predict_price
 
+# Tegner/Oppdaterer viduet vi får opp når plt.show() kjører
+# Alle events, alle klikk på kartet eller på knapper kaller denne funksjonen
 def draw_the_map():
     ax_map.cla()
     ax_map.imshow(img, extent=(0, 100, 0, 100), aspect='auto')
     x,y = marked_point
-    ax_map.scatter(x, y, marker='+', c='blue', s=200)
+    ax_map.scatter(x, y, marker='+', c='darkblue', s=170)
     print(f"marked_point: {marked_point}")
     if marked_point == (0, 0):
         return
 
-    m2_price:float = predict_price(x, y, m2, house_type, standard_type) / m2
-    price = f"{round(m2_price * 1000, -2):,.0f}"
+    # display_price er stringen som blir vist ved markøren på kartet.
+    # den baserer seg på deafault_m2. Eksempelvis 100 kvadratmeter
+    default_m2_price:float = predict_price(x, y, default_m2, house_type, standard_type) / default_m2
+    display_price = f"{round(default_m2_price * 1000, -2):,.0f}\nkr/m2"
 
-    m2list = [50,100,150,200]
-    price_m2 = [predict_price(x, y,  _m2, house_type, standard_type)/_m2 for _m2 in m2list]
+    # bar grafen viser priser per kvadratmeter
+    # history_price_bars gir verdiene og dermed høyden til stolpene på bar grafen
+    history_m2_list = [50,100,150,200]
+    history_price_bars = [predict_price(x, y,  _m2, house_type, standard_type)/_m2 for _m2 in history_m2_list]
+    # _m2 er bare en temp veriabel
 
-    ax_map.text(x + 3, y - 1, price, color='blue', fontsize=15)
+    ax_map.text(x - 7, y - 14, display_price, color='darkblue', fontsize=17, bbox=dict(facecolor="white", alpha=0.3, edgecolor="none")) # tekst ved markør på kart
     ax_history.cla()
-    ax_history.bar(m2list, price_m2, color='blue', width=5)
-    ax_history.legend(["pris per m2"])
+    bars_colors = ["darkblue" if size == default_m2 else "#35a68f" for size in history_m2_list]
+    ax_history.bar(history_m2_list, history_price_bars, color=bars_colors, width=20) # bar stolper
+    ax_history.set_ylabel("Pris per m2 (tusen kr)", color='white') # Legger til en label på y aksen til grafen
+    ax_history.set_xlabel("m2", color='white')  # Legger til en label på x aksen til grafen
 
     plt.draw()
 
@@ -56,21 +65,30 @@ standard_types = {
     'Luksus': 4
 }
 
+# Setter start-verdier for hustype, husstandard, kvadratmeter, og punkt i kartet
 house_type = 1
 standard_type = 1
-m2 = 100
+default_m2 = 100 # Bestemmer hva slags kvadratmeter pris som vises ved marked_point på kartet
 marked_point = (43,57)
 
 # Create the figures
-fig = plt.figure(figsize=(6.0, 6.0),facecolor='lightgray')  # type: ignore[arg-type]
-fig.suptitle("Hus priser Bergen (per m2)", fontsize=20, y=0.95)
+fig = plt.figure(figsize=(10.0, 7.0),facecolor='#053028')  # Endret startstørrelse på vinduet, og fargeinnhold
+fig.suptitle("Hus priser i Bergen (1000kr/m2)", color='white', fontsize=20, y=0.97) # Endret tekstinnhold og plassering
 
-ax_map = fig.add_axes((0.4, 0.05, 0.50, .85))
-ax_radio_house_type = fig.add_axes((0.05, 0.75, 0.30, .15))
-ax_radio_standard = fig.add_axes((0.05, 0.57, 0.30, .15))
-ax_history = fig.add_axes((0.05, 0.05, 0.30, .50))
-ax_radio_house_type.set_facecolor('lightgray')
-ax_radio_standard.set_facecolor('lightgray')
+# Bestemmer hvor figurene / elementene ligger i vinduet
+ax_map = fig.add_axes((0.42, 0.10, 0.50, 0.80))
+ax_radio_house_type = fig.add_axes((0.08, 0.75, 0.25, 0.15))
+ax_radio_standard = fig.add_axes((0.08, 0.57, 0.25, 0.15))
+ax_history = fig.add_axes((0.08, 0.10, 0.25, 0.40))
+
+# skifter bakgrunnsfarge på figurene
+ax_radio_house_type.set_facecolor('#dadce6')
+ax_radio_standard.set_facecolor('#dadce6')
+ax_history.set_facecolor('#dadce6')
+
+# skifter farge på tallene rundt figurene
+ax_map.tick_params(axis='both', colors='white')
+ax_history.tick_params(axis='both', colors='white')
 
 radio_button_category = RadioButtons(ax_radio_house_type, list(house_types.keys()))
 radio_button_standard = RadioButtons(ax_radio_standard, list(standard_types.keys()))
