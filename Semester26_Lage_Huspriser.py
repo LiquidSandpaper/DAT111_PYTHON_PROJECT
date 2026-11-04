@@ -47,7 +47,7 @@ np.random.seed(1234)
 samples = 1024
 xs = np.random.randint(0, 100, samples)
 ys = np.random.randint(0, 100, samples)
-house_types = np.round(np.random.uniform(1, 4, samples)).astype(int)
+house_types = np.random.randint(1, 4, samples) # bugfix: den forje koden lagde hus av typen 4, som ikke eksisterer
 standards = np.random.uniform(1.0, 4.0, samples)
 m2s = np.random.randint(30, 250, samples)
 sales_price = np.zeros(samples, dtype=int)
