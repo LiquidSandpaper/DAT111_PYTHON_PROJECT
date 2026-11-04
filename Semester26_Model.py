@@ -48,4 +48,4 @@ model = LinearRegression()
 poly = PolynomialFeatures(degree=p_degree)
 build_and_train_model()
 
-print(f"m2  {predict_price(100,100, 200,1, 1)}") # just test one..
+print(f"m2  {predict_price(43,57, 100,1, 1)}") # just test one.. (endret verdier)
