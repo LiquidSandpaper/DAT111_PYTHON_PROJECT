@@ -44,7 +44,7 @@ def make_house_price(x:int, y:int, house_type:int, standard:int, m2:int)->float:
     return price
 
 np.random.seed(1234)
-samples = 256
+samples = 1024
 xs = np.random.randint(0, 100, samples)
 ys = np.random.randint(0, 100, samples)
 house_types = np.round(np.random.uniform(1, 4, samples)).astype(int)
