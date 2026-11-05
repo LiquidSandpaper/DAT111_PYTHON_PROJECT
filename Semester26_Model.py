@@ -6,6 +6,9 @@ from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LinearRegression, Ridge, RidgeCV
 from sklearn.metrics import r2_score, mean_absolute_error
 
+r2_print = ""
+mae_print = ""
+
 def build_and_train_model():
     global model
     df:DataFrame = pd.read_csv("House_Prices.csv")
@@ -30,6 +33,10 @@ def build_and_train_model():
         print(f"Price: {l_test[i]:>10,.0f}  Predicted: {l_pred[i]:>10,.0f}")
     print(f"R-squared: {r2_score(y_test, y_pred):.2f}")
     print(f"MAE      : {mean_absolute_error(y_test, y_pred):.0f}")
+    global r2_print
+    global mae_print
+    r2_print = f"{r2_score(y_test, y_pred):.2f}"
+    mae_print = f"{mean_absolute_error(y_test, y_pred):.0f}"
 
 def predict_price(x, y, m2:int,house_type, standard) -> float:
     # Build a single sample

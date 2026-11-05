@@ -3,6 +3,8 @@ import matplotlib.pyplot as plt
 from matplotlib.widgets import RadioButtons
 import matplotlib.image as mpimg
 from Semester26_Model import  predict_price
+from Semester26_Model import r2_print
+from Semester26_Model import mae_print
 
 # Tegner/Oppdaterer viduet vi får opp når plt.show() kjører
 # Alle events, alle klikk på kartet eller på knapper kaller denne funksjonen
@@ -18,7 +20,7 @@ def draw_the_map():
     # display_price er stringen som blir vist ved markøren på kartet.
     # den baserer seg på deafault_m2. Eksempelvis 100 kvadratmeter
     default_m2_price:float = predict_price(x, y, default_m2, house_type, standard_type) / default_m2
-    display_price = f"{round(default_m2_price * 1000, -2):,.0f}\nkr/m2"
+    display_price = f"{round(default_m2_price * 1000, -2):,.0f}\n kr/m2".replace(",", " ")
 
     # bar grafen viser priser per kvadratmeter
     # history_price_bars gir verdiene og dermed høyden til stolpene på bar grafen
@@ -32,6 +34,7 @@ def draw_the_map():
     ax_history.bar(history_m2_list, history_price_bars, color=bars_colors, width=20) # bar stolper
     ax_history.set_ylabel("Pris per m2 (tusen kr)", color='white') # Legger til en label på y aksen til grafen
     ax_history.set_xlabel("m2", color='white')  # Legger til en label på x aksen til grafen
+    fig.canvas.manager.set_window_title("Bolig priser i Bergen")
 
     plt.draw()
 
@@ -73,7 +76,8 @@ marked_point = (43,57)
 
 # Create the figures
 fig = plt.figure(figsize=(10.0, 7.0),facecolor='#053028')  # Endret startstørrelse på vinduet, og fargeinnhold
-fig.suptitle("Hus priser i Bergen (1000kr/m2)", color='white', fontsize=20, y=0.97) # Endret tekstinnhold og plassering
+fig.suptitle(f"Bolig priser i Bergen", color='white', fontsize=20, x=0.67, y=0.97)
+fig.text(0.12, 0.51,f"r2: {r2_print}   MAE: {mae_print}", color='white', fontsize=12)
 
 # Bestemmer hvor figurene / elementene ligger i vinduet
 ax_map = fig.add_axes((0.42, 0.10, 0.50, 0.80))
