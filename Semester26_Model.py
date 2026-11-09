@@ -49,7 +49,7 @@ def predict_price(x, y, m2:int,house_type, standard) -> float:
 
 
 y_columns=["x","y","m2","house_type","standard"]
-p_degree = 3
+p_degree = 2
 model = LinearRegression()
 
 poly = PolynomialFeatures(degree=p_degree)
